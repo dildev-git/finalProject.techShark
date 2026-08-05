@@ -141,38 +141,133 @@ if ($is_logged_in) {
         .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; padding: 15px; border-radius: 4px; margin-bottom: 20px;}
         .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; padding: 15px; border-radius: 4px; margin-bottom: 20px;}
         .alert-info { background: #eff6ff; color: #1e40af; border: 1px solid #3b82f6; padding: 15px; border-radius: 4px; margin-bottom: 20px;}
-        .inq-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; border-left: 4px solid var(--primary-color); }
-        .inq-resolved { border-left-color: var(--secondary-color); }
-        .inq-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; color: #64748b; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
-        .inq-msg { font-size: 14px; color: #334155; line-height: 1.6; margin-bottom: 0; }
-        .inq-reply { font-size: 14px; color: #334155; line-height: 1.6; }
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status-Pending { background: #fef3c7; color: #92400e; }
-        .status-Resolved { background: #d1fae5; color: #065f46; }
-        
-        .history-scroll-container {
-            max-height: 450px;
-            overflow-y: auto;
-            padding-right: 10px;
+        /* ── Support History ── */
+        #support-history { scroll-margin-top: 150px; }
+
+        .history-wrap {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
 
-        #support-history {
-            scroll-margin-top: 150px; /* Change this amount (100px) according to the height of the header above. */
+        .inq-thread {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            overflow: hidden;
+            border: 1px solid #e8edf3;
+            transition: box-shadow 0.2s ease;
+        }
+        .inq-thread:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.10); }
+
+        /* Top meta bar */
+        .inq-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e8edf3;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .inq-meta-left { display: flex; align-items: center; gap: 10px; }
+        .inq-id-badge {
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+        .inq-date { display: flex; align-items: center; gap: 5px; }
+
+        /* Status pill */
+        .inq-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .inq-status.pending  { background: #fef3c7; color: #92400e; }
+        .inq-status.resolved { background: #d1fae5; color: #065f46; }
+
+        /* Message + Reply columns */
+        .inq-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        @media (max-width: 640px) { .inq-cols { grid-template-columns: 1fr; } }
+
+        .inq-col {
+            padding: 18px 22px;
+        }
+        .inq-col + .inq-col {
+            border-left: 1px solid #e8edf3;
+        }
+        .inq-col-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 10px;
+        }
+        .inq-col-label.customer { color: var(--primary-color); }
+        .inq-col-label.support  { color: #10b981; }
+
+        .inq-bubble {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+            max-height: 110px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .inq-bubble::-webkit-scrollbar { width: 4px; }
+        .inq-bubble::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .inq-bubble::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        .inq-awaiting {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 8px 0;
+        }
+        .inq-awaiting::before {
+            content: '';
+            width: 8px; height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%  { opacity: 0.4; transform: scale(0.7); }
         }
 
-        /* Layout for Left/Right split inside the card */
-        .inq-body { display: flex; gap: 20px; align-items: stretch; }
-        .inq-msg-col { flex: 1; max-height: 120px; overflow-y: auto; padding-right: 15px; }
-        .inq-reply-col { flex: 1; max-height: 120px; overflow-y: auto; padding-left: 15px; border-left: 1px solid #e2e8f0; }
-
-        /* Shared scrollbar styling */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* Empty state */
+        .inq-empty {
+            text-align: center;
+            padding: 60px 30px;
+            background: #fff;
+            border-radius: 14px;
+            border: 2px dashed #e2e8f0;
+            color: #94a3b8;
+        }
+        .inq-empty i { font-size: 48px; margin-bottom: 16px; display: block; opacity: 0.5; }
+        .inq-empty h3 { margin: 0 0 8px; color: #64748b; font-size: 18px; }
+        .inq-empty p { margin: 0; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -259,48 +354,81 @@ if ($is_logged_in) {
 
         <!-- Past Inquiries Section (Logged in only) -->
         <?php if ($is_logged_in): ?>
-        <div id="support-history" class="past-inquiries-section" style="margin-top: 60px;">
-            <h2 class="section-title">My Support History</h2>
-            
+        <div id="support-history" style="margin-top: 60px;">
+
+            <!-- Section Header -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+                <div>
+                    <h2 class="section-title" style="margin:0 0 4px;">My Support History</h2>
+                    <p style="margin:0; font-size:14px; color:var(--text-light);">Track all your submitted inquiries and our replies below.</p>
+                </div>
+                <?php if(!empty($inquiries)): ?>
+                <span style="background:#eff6ff; color:var(--primary-color); font-size:13px; font-weight:600; padding:6px 16px; border-radius:20px; border:1px solid #bfdbfe;">
+                    <?php echo count($inquiries); ?> <?php echo count($inquiries) == 1 ? 'Inquiry' : 'Inquiries'; ?>
+                </span>
+                <?php endif; ?>
+            </div>
+
             <?php if(empty($inquiries)): ?>
-                <div style="text-align:center; padding:50px; background:white; border-radius:8px; box-shadow: var(--shadow-sm);">
-                    <i class="fas fa-envelope-open-text" style="font-size:48px; color:var(--medium-gray); margin-bottom:20px;"></i>
-                    <h3>No past inquiries.</h3>
-                    <p style="color: var(--text-light);">When you submit an inquiry, you can track the responses here.</p>
+                <div class="inq-empty">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <h3>No inquiries yet</h3>
+                    <p>When you submit an inquiry, you can track the replies here.</p>
                 </div>
             <?php else: ?>
-                <div class="history-scroll-container custom-scrollbar">
-                    <?php foreach($inquiries as $inq): ?>
-                        <div class="inq-card <?php echo $inq['status'] == 'Resolved' ? 'inq-resolved' : ''; ?>" style="margin-bottom: 0;">
-                            <div class="inq-header">
-                                <span><i class="far fa-clock"></i> <?php echo date('M d, Y g:i A', strtotime($inq['dateSubmitted'])); ?></span>
-                                <span class="status-badge status-<?php echo str_replace(' ', '-', $inq['status']); ?>"><?php echo htmlspecialchars($inq['status']); ?></span>
+                <div class="history-wrap">
+                    <?php foreach($inquiries as $idx => $inq):
+                        $is_resolved = $inq['status'] === 'Resolved';
+                        $inq_num = count($inquiries) - $idx;
+                    ?>
+                    <div class="inq-thread">
+
+                        <!-- Meta bar -->
+                        <div class="inq-meta">
+                            <div class="inq-meta-left">
+                                <span class="inq-date">
+                                    <i class="far fa-calendar-alt"></i>
+                                    <?php echo date('M d, Y', strtotime($inq['dateSubmitted'])); ?>
+                                    &nbsp;&middot;&nbsp;
+                                    <i class="far fa-clock"></i>
+                                    <?php echo date('g:i A', strtotime($inq['dateSubmitted'])); ?>
+                                </span>
                             </div>
-                            
-                            <div class="inq-body">
-                                <!-- Left side: Customer Inquiry -->
-                                <div class="inq-msg-col custom-scrollbar">
-                                    <strong style="display:block; margin-bottom:8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8;"><i class="fas fa-user"></i> Your Inquiry</strong>
-                                    <div class="inq-msg">
-                                        <?php echo nl2br(htmlspecialchars($inq['message'])); ?>
-                                    </div>
-                                </div>
-                                
-                                <!-- Right side: Support Reply -->
-                                <div class="inq-reply-col custom-scrollbar">
-                                    <?php if($inq['response']): ?>
-                                        <div class="inq-reply" style="height: 100%; box-sizing: border-box; margin: 0;">
-                                            <strong style="display:block; margin-bottom:8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #10b981;"><i class="fas fa-headset"></i> Support Reply</strong>
-                                            <?php echo nl2br(htmlspecialchars($inq['response'])); ?>
-                                        </div>
-                                    <?php else: ?>
-                                        <div style="font-size:13px; color:#94a3b8; font-style:italic; height: 100%; display: flex; align-items: center; justify-content: center;">
-                                            Awaiting response from our team...
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
+                            <span class="inq-status <?php echo $is_resolved ? 'resolved' : 'pending'; ?>">
+                                <i class="fas <?php echo $is_resolved ? 'fa-check-circle' : 'fa-hourglass-half'; ?>"></i>
+                                <?php echo htmlspecialchars($inq['status']); ?>
+                            </span>
                         </div>
+
+                        <!-- Two-column body -->
+                        <div class="inq-cols">
+
+                            <!-- Customer Message -->
+                            <div class="inq-col">
+                                <div class="inq-col-label customer">
+                                    <i class="fas fa-user-circle"></i> Your Inquiry
+                                </div>
+                                <div class="inq-bubble">
+                                    <?php echo nl2br(htmlspecialchars($inq['message'])); ?>
+                                </div>
+                            </div>
+
+                            <!-- Support Reply -->
+                            <div class="inq-col">
+                                <div class="inq-col-label support">
+                                    <i class="fas fa-headset"></i> Support Reply
+                                </div>
+                                <?php if($inq['response']): ?>
+                                    <div class="inq-bubble">
+                                        <?php echo nl2br(htmlspecialchars($inq['response'])); ?>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="inq-awaiting">Awaiting response from our team…</div>
+                                <?php endif; ?>
+                            </div>
+
+                        </div>
+                    </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
